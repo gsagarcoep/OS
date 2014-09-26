@@ -1,0 +1,41 @@
+#!/bin/bash
+
+# Executing from <Your path>/pintos/src/utils
+
+#install QEMU
+sudo apt-get install qemu
+
+QEMU_PATH=`whereis qemu-system-i386 | cut -d " " -f 2`
+echo "QEMU path : " $QEMU_PATH
+
+# sym link
+sudo ln -s $QEMU_PATH /bin/qemu
+
+#Change GDB MACRO Path
+PATH_GDB_MACRO=../misc/gdb-macros
+sed -in "s:^GDBMACROS.*$:GDBMACROS=$PATH_GDB_MACRO:g" pintos-gdb
+
+#Change Makefile
+sed -in "s:^LDFLAGS:LDLIBS:" Makefile
+
+#Make utils
+make
+
+#Chnge EMU in Make.vars
+sed -in "s:--bochs:--qemu:" ../threads/Make.vars
+
+OLD_DIR=`pwd`
+
+"Entering : $OLD_DIR"
+
+cd ../threads
+make
+
+echo "Retuning from `pwd` to $OLD_DIR"
+cd $OLD_DIR
+
+#Changing pintos file
+sed -in "103 s:bochs:qemu:" pintos
+
+sed -in "259 s:kernel.bin:../threads/build/kernel.bin:" pintos
+sed -in "362 s:loader.bin:../threads/build/loader.bin:" Pintos.pm 

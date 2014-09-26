@@ -1,0 +1,22 @@
+ls
+ls|wc
+ls|wc|wc|wc|wc
+cat >>Sagar
+cat Sagar
+cat >>Sagar
+!cat
+cat Sagar
+!cat
+pwd
+ls -a
+cat .myshellrc
+clear
+cat README.txt
+cat README.txt > temp
+ls
+rm temp
+!cat
+cat README.txt > temp| wc
+!2
+!100
+                ls
